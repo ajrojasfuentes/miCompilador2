@@ -1,9 +1,14 @@
 package com.miCompilador;
 
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * La clase GeneradorCodigo extiende miGramaticaBaseVisitor para generar código basado en el árbol
+ * de sintaxis analizado por ANTLR.
+ */
 public class GeneradorCodigo extends miGramaticaBaseVisitor<String> {
 
     private StringBuilder codigo = new StringBuilder();
@@ -14,15 +19,30 @@ public class GeneradorCodigo extends miGramaticaBaseVisitor<String> {
     // Lista de variables globales para la sección .bss
     private List<String> variablesGlobales = new ArrayList<>();
 
+    /**
+     * Obtiene el código generado hasta el momento.
+     *
+     * @return Una cadena que representa el código generado.
+     */
     public String getCodigo() {
         return codigo.toString();
     }
 
     // Métodos auxiliares para generar etiquetas y manejar variables
+    /**
+     * Genera una nueva etiqueta única.
+     *
+     * @return El nombre de la nueva etiqueta.
+     */
     private String nuevaEtiqueta() {
         return "etiqueta_" + (contadorEtiquetas++);
     }
 
+    /**
+     * Genera una nueva variable única.
+     *
+     * @return El nombre de la nueva variable.
+     */
     private String nuevaVariable() {
         return "var_" + (contadorVariables++);
     }
@@ -245,6 +265,11 @@ public class GeneradorCodigo extends miGramaticaBaseVisitor<String> {
         return null;
     }
 
+    /**
+     * Obtiene el código completo generado, incluyendo las secciones de datos, bss y texto.
+     *
+     * @return Una cadena que representa el código completo generado.
+     */
     public String getCodigoCompleto() {
         StringBuilder codigoCompleto = new StringBuilder();
 
@@ -279,6 +304,5 @@ public class GeneradorCodigo extends miGramaticaBaseVisitor<String> {
 
         return codigoCompleto.toString();
     }
-
 
 }

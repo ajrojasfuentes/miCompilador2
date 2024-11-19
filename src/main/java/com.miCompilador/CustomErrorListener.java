@@ -2,8 +2,6 @@ package com.miCompilador;
 
 import org.antlr.v4.runtime.*;
 
-import java.lang.reflect.Array;
-
 public class CustomErrorListener extends BaseErrorListener {
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer,
