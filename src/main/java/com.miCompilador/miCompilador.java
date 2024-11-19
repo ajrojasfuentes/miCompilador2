@@ -3,6 +3,9 @@ package com.miCompilador;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import picocli.CommandLine;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -13,7 +16,7 @@ public class miCompilador implements Callable<Integer> {
     public Integer call() throws Exception {
 
         // Ruta al archivo de entrada
-        String filePath = "/home/ajrf/Workspace/P2/miCompilador/src/main/resources/prueba.txt";
+        String filePath = "/home/ajrf/Workspace/miCompilador2/src/main/resources/prueba.txt";
 
         // Crear el lexer con el archivo de entrada
         miGramaticaLexer lexer = new miGramaticaLexer(CharStreams.fromFileName(filePath));
@@ -47,6 +50,25 @@ public class miCompilador implements Callable<Integer> {
 
         // Mensaje de finalización
         System.out.println("Compilación completada con éxito.");
+
+        // Generar el código NASM
+        GeneradorCodigo generador = new GeneradorCodigo();
+        generador.visit(tree);
+
+        // Obtener el código completo
+        String codigoNASM = generador.getCodigoCompleto();
+
+        // Guardar el código en un archivo .asm
+        try (PrintWriter out = new PrintWriter("output.txt")) {
+            out.println(codigoNASM);
+            System.out.println("Generación de código completada. Código guardado en 'output.asm'.");
+        } catch (IOException e) {
+            System.err.println("Error al escribir el archivo de salida: " + e.getMessage());
+            return 1;
+        }
+
+// Mensaje de finalización
+        System.out.println("Compilación completada exitosamente.");
 
         return 0;
     }
